@@ -28,7 +28,7 @@ function App() {
                 <h2>Update successful. You can now close this window.</h2>
                 <h2>Return to your GRAPES app to login with your new credentials!</h2>
             </div>) : (<div>
-                <h1>Change GRAPES Password</h1>
+                <h1>GRAPES Account Updates</h1>
                 {session == null ? <div>Loading...</div> : (<>
                     <h3>Hi {displayName}, let's reset your password.</h3>
                     <div>
