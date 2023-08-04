@@ -62,6 +62,9 @@ const AuthProvider = (props: Props) => {
                 setUser(session ? true : false);
                 if (session) handleSessionUser(session);
             }
+            if (event == "USER_UPDATED") {
+                console.log("USER_UPDATED event");
+            }
         })
     }, [])
 
