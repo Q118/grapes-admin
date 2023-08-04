@@ -8,7 +8,6 @@ import { config } from "./config";
 // * https://vitejs.dev/guide/env-and-mode.html
 const SUPABASE_URL = import.meta.env.MODE === 'development' ? config.supabase_url : import.meta.env.SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.MODE === 'development' ? config.supabase_key : import.meta.env.SUPABASE_KEY;
-console.log(import.meta.env)
 
 
 
