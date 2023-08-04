@@ -68,7 +68,7 @@ const AuthProvider = (props: Props) => {
                 setUser(session ? true : false);
                 if (session) handleSessionUser(session);
             }
-            if (event == "USER_UPDATED") {
+            if (event === "INITIAL_SESSION" || event === "SIGNED_IN") { // then it went through the email update flow
                 alert("Email updated successfully!");
                 return setCloseIt(true);
             }
