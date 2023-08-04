@@ -60,6 +60,7 @@ const AuthProvider = (props: Props) => {
      */
     useEffect(() => {
         supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("event: ", event)
             if (event == "PASSWORD_RECOVERY") {
                 console.log("PASSWORD_RECOVERY event");
                 console.log(`Supabase auth event: ${event}`);
