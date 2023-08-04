@@ -1,14 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import './App.css';
 import { useAuthContext } from './AuthProvider';
 
 
 
 function App() {
-    const { session, displayName, setNewPassword } = useAuthContext();
+    const { session, displayName, setNewPassword, closeIt, setCloseIt } = useAuthContext();
     const inputRefPassword = useRef<HTMLInputElement>(null);
     const inputRefConfirmPassword = useRef<HTMLInputElement>(null);
-    const [ closeIt, setCloseIt ] = useState<boolean>(false);
 
     function handleSubmit(event: any) {
         event.preventDefault();
@@ -20,13 +19,13 @@ function App() {
         } catch (error) {
             alert("There was an error updating your password. Try again later.");
         }
-        return setCloseIt(true); // get to hree if no error
+        return setCloseIt && setCloseIt(true); // get to hree if no error
     }
 
     return (
         <>
             {closeIt ? (<div>
-                <h2>Password Update successful. You can now close this window.</h2>
+                <h2>Update successful. You can now close this window.</h2>
                 <h2>Return to your GRAPES app to login with your new credentials!</h2>
             </div>) : (<div>
                 <h1>Change GRAPES Password</h1>

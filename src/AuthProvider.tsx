@@ -10,6 +10,10 @@ type ContextProps = {
     displayName: string | null;
     newPassword: string | null;
     setNewPassword: (newPassword: string | null) => void;
+    /** signifies if the tab can be closed */
+    closeIt: boolean;
+    setCloseIt: (closeIt: boolean) => void;
+
 };
 
 const AuthContext = createContext<Partial<ContextProps>>({});
@@ -38,6 +42,7 @@ const AuthProvider = (props: Props) => {
     const [ session, setSession ] = useState<Session | null>(null);
     const [ displayName, setDisplayName ] = useState<string | null>(null);
     const [ newPassword, setNewPassword ] = useState<string | null>(null);
+    const [ closeIt, setCloseIt ] = useState<boolean>(false);
 
     useEffect(() => {
         if (newPassword) {
@@ -63,7 +68,8 @@ const AuthProvider = (props: Props) => {
                 if (session) handleSessionUser(session);
             }
             if (event == "USER_UPDATED") {
-                console.log("USER_UPDATED event");
+                alert("Email updated successfully!");
+                return setCloseIt(true);
             }
         })
     }, [])
@@ -88,7 +94,7 @@ const AuthProvider = (props: Props) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, session, displayName, newPassword, setNewPassword }}>
+        <AuthContext.Provider value={{ user, session, displayName, newPassword, setNewPassword, closeIt, setCloseIt }}>
             {props.children}
         </AuthContext.Provider>
     );
