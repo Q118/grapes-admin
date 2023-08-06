@@ -13,6 +13,7 @@
             "DOM",
             "DOM.Iterable"
         ],
+        "allowJs": true,
         "module": "ESNext",
         "skipLibCheck": true,
         /* Bundler mode */
@@ -29,7 +30,7 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "src"
+        "src",
     ],
     "references": [
         {
