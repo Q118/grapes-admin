@@ -2,8 +2,6 @@ import { useContext, createContext, useState, useEffect } from 'react';
 import { supabase } from './initSupabase';
 import { Session } from '@supabase/supabase-js';
 
-
-
 type ContextProps = {
     user: null | boolean;
     session: Session | null;
@@ -60,7 +58,6 @@ const AuthProvider = (props: Props) => {
      */
     useEffect(() => {
         supabase.auth.onAuthStateChange(async (event, session) => {
-            console.log("event: ", event)
             if (event == "PASSWORD_RECOVERY") {
                 console.log("PASSWORD_RECOVERY event");
                 console.log(`Supabase auth event: ${event}`);
@@ -102,3 +99,5 @@ const AuthProvider = (props: Props) => {
 };
 
 export { AuthContext, AuthProvider };
+
+

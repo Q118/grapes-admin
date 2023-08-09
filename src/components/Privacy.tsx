@@ -12,10 +12,11 @@ export function PrivacyComp() {
     }, []);
 
     async function loadMD() {
-        const markdownFileContent = (await import(`./assets/PrivacyPolicy.md?raw`)).default;
+        const markdownFileContent = (await import(`../assets/PrivacyPolicy.md?raw`)).default;
         setMarkdownText(markdownFileContent);
     }
 
+    // <script src="https://gist.github.com/Q118/b074b327eea62c05d616da4792252cfd.js"></script>
 
     return (
         loading ? <h1>Loading...</h1> :
