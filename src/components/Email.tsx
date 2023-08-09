@@ -1,6 +1,9 @@
 import { useState, useRef } from "react";
 
 
+// theyd be coming heree from the pAccount page adterter  clicking Change Email
+// TODO add small help text in there that says "this is what u use to login"
+
 export function EmailComponent() {
     // const { closeIt, setCloseIt } = useAuthContext();
     // const inputRefPassword = useRef<HTMLInputElement>(null);
@@ -42,6 +45,8 @@ export function EmailComponent() {
                 <br />
             </div>
             <button type="button" onClick={handleSubmit}>submit</button>
+            <br />
+            <br />
     </div>
     )
 }

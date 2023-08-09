@@ -2,6 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
+const ADMIN_DB = import.meta.env.VITE_ADMIN_DB;
+// TODO: I dont need the auth keys actually
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: {
@@ -10,5 +12,12 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
     }
 });
 
+
+
 // Access auth admin api
-// const adminAuthClient = supabase.auth.admin
+export const supabaseAdmin = createClient(SUPABASE_URL, ADMIN_DB, {
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+    }
+});

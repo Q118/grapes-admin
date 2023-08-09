@@ -11,6 +11,8 @@ type ContextProps = {
     setUserId: (user_id: string | null) => void;
     loading: boolean;
     setLoading: (loading: boolean) => void;
+    readyToClose: boolean;
+    setReadyToClose: (closeIt: boolean) => void;
 };
 
 const AdminContext = createContext<Partial<ContextProps>>({});
@@ -20,14 +22,24 @@ interface Props { children: React.ReactNode; }
 export function useAdminContext() {
     return useContext(AdminContext);
 }
-
+// TODO there will bew things in here i end up not uysing so remove those
 
 const AdminProvider = (props: Props) => {
     const [ userState, setUserState ] = useState<null | boolean>(null);
     const [ session, setSession ] = useState<Session | null>(null);
     const [ displayName, setDisplayName ] = useState<string | null>(null);
     const [ userId, setUserId ] = useState<string | null>(null);
-    const [ loading, setLoading ] = useState<boolean>(false);
+    const [ loading, setLoading ] = useState<boolean>(true);
+    const [ readyToClose, setReadyToClose ] = useState<boolean>(false);
+
+    // useEffect(() => {
+    //     // if (displayName == null) Set
+    //     if (displayName && userId) setLoading(false);
+    //     else setLoading(true);
+
+    // }, [ displayName, userId ]);
+
+
 
 
     return (
@@ -39,7 +51,9 @@ const AdminProvider = (props: Props) => {
             userId,
             setUserId,
             loading,
-            setLoading
+            setLoading,
+            readyToClose,
+            setReadyToClose
         }}>
             {props.children}
         </AdminContext.Provider>

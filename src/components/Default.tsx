@@ -10,7 +10,6 @@ export function DefaultComponent({ setUserAction }: DefaultProps) {
 
     return (
         <div>
-            {/* <h3><i>Admin Options</i></h3> */}
             <div style={{
                 marginTop: '2rem',
                 padding: '1rem',
@@ -18,7 +17,8 @@ export function DefaultComponent({ setUserAction }: DefaultProps) {
             }}>
                 <button onClick={() => setUserAction('privacy')}>Grapes-App Privacy Policy</button><br />
                 <br />
-                {/* this is the only thing we really want them to do, bc they can just go directly to the updates without comign from the app with their id.. */}
+                {/* this is the only thing we really want them to do, bc they can just go directly to the updates without comign from the app with their id.. but i still think i technically could?... */}
+                {/* // TODO [future]: allow them in here to do updates. */}
             </div>
         </div>
     )
