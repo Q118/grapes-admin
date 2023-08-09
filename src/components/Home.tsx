@@ -1,6 +1,4 @@
-
-
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAdminContext } from '../contexts/AdminContext';
 import { PasswordComponent } from './Password';
@@ -10,6 +8,7 @@ import { EmailComponent } from './Email';
 import { DefaultComponent } from './Default';
 import { supabase } from '../initSupabase';
 import { CloseComponent } from './CloseComponent';
+import { request_error } from '../constants';
 
 interface MyMap {
     [ key: string ]: string | undefined
@@ -33,34 +32,25 @@ export function Home() {
     const { loading, displayName, setLoading, setUserId, setDisplayName, readyToClose } = useAdminContext();
     const [ error, setError ] = useState<string | null>(null);
     const [ userAction, setUserAction ] = useState<string | null>(null);
-    // const [ loading, setLoading ] = useState<boolean>(false);
     let location = useLocation();
 
-    // useEffect(() => {
-    //     // if (displayName == null) Set
-    //     if (displayName && userId) setLoading && setLoading(false);
-    //     else setLoading && setLoading(true);
+    useEffect(() => { setUpHome(); }, [ location ])
 
-    // }, [ displayName, userId ]);
-
-
-    useEffect(() => {
-        // TODO this in a function then called inside useEffect
+    function setUpHome() {
         if (window.location.href.includes('error')) {
             setUserAction('error');
             setError(window.location.href.split('error=')[ 1 ]);
         }
         let paramArray = location.search.split('?').filter((param) => param !== '');
-        console.log("paramArray: ", paramArray);
         const urlVal = USER_ACTIONS[ paramArray[ 0 ] ] || null;
         const user_id = paramArray[ 1 ]?.split('=')[ 1 ] || null;
-        if (user_id) {
+        if (user_id && user_id.length > 0) {
             setUserAction(urlVal);
             setUserId && setUserId(user_id);
             handleDisplayName(user_id).then(() => setLoading && setLoading(false));
-        }
-    }, [ location ])
-
+        } else setLoading && setLoading(false);
+        // else it's just the default page
+    }
 
     async function handleDisplayName(user_id: string) {
         const { data, error } = await supabase
@@ -69,7 +59,7 @@ export function Home() {
             .eq('id', user_id)
         if (error) {
             setUserAction('error');
-            return setError('There was an error fetching your account info. Please try again later. If the problem persists, please contact support at shel.programmer@gmail.com.');
+            return setError(request_error);
         }
         if (data && data[ 0 ]) {
             setDisplayName && setDisplayName(data[ 0 ].user_name);
@@ -83,13 +73,10 @@ export function Home() {
             case 'password': return <PasswordComponent />;
             case 'privacy': return <PrivacyComp />;
             case 'error': return <ErrorComponent errorMessage={error} />;
-            case 'email': return <EmailComponent />;
+            case 'email': return <EmailComponent setUserAction={setUserAction} />;
             default: return <DefaultComponent setUserAction={setUserAction} />;
         }
     }
-
-    console.log("userAction: ", userAction)
-
 
     return (
         <>

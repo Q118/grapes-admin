@@ -1,10 +1,6 @@
-import { useContext, createContext, useState, useEffect } from 'react';
-import { Session } from '@supabase/supabase-js';
-// import { supabase } from './initSupabase';
+import { useContext, createContext, useState } from 'react';
 
 type ContextProps = {
-    userState: null | boolean;
-    session: Session | null;
     displayName: string | null;
     setDisplayName: (displayName: string | null) => void;
     userId: string | null;
@@ -22,30 +18,19 @@ interface Props { children: React.ReactNode; }
 export function useAdminContext() {
     return useContext(AdminContext);
 }
-// TODO there will bew things in here i end up not uysing so remove those
-
 const AdminProvider = (props: Props) => {
-    const [ userState, setUserState ] = useState<null | boolean>(null);
-    const [ session, setSession ] = useState<Session | null>(null);
     const [ displayName, setDisplayName ] = useState<string | null>(null);
     const [ userId, setUserId ] = useState<string | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
     const [ readyToClose, setReadyToClose ] = useState<boolean>(false);
-
-    // useEffect(() => {
-    //     // if (displayName == null) Set
-    //     if (displayName && userId) setLoading(false);
-    //     else setLoading(true);
-
-    // }, [ displayName, userId ]);
 
 
 
 
     return (
         <AdminContext.Provider value={{
-            userState,
-            session,
+            // userState,
+            // session,
             displayName,
             setDisplayName,
             userId,

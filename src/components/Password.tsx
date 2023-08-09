@@ -15,13 +15,16 @@ export function PasswordComponent() {
         event.preventDefault();
         const _newPassword = inputRefPassword.current?.value;
         const confirmNewPassword = inputRefConfirmPassword.current?.value;
+        if (!_newPassword) return alert("Please enter a new password.");
         if (_newPassword && _newPassword.length < 6) return alert("Password must be at least 6 characters long.");
         if (_newPassword !== confirmNewPassword) return alert("Passwords do not match. Please try again.");
         if (userId) {
             const { data: user, error } = await supabaseAdmin.auth.admin.updateUserById(
                 userId, { password: _newPassword }
             )
-            if (error) return alert(default_error);
+            if (error) {
+                return alert(default_error);
+            }
             if (user) {
                 return setReadyToClose && setReadyToClose(true);
             }

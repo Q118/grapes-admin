@@ -1,52 +1,63 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
+import { useAdminContext } from "../contexts/AdminContext";
+import { supabaseAdmin } from "../initSupabase";
 
 
-// theyd be coming heree from the pAccount page adterter  clicking Change Email
-// TODO add small help text in there that says "this is what u use to login"
+type EmailProps = {
+    setUserAction: (userAction: string | null) => void;
+};
 
-export function EmailComponent() {
-    // const { closeIt, setCloseIt } = useAuthContext();
-    // const inputRefPassword = useRef<HTMLInputElement>(null);
-    // const inputRefConfirmPassword = useRef<HTMLInputElement>(null);
-    const inputRefPassword = useRef<HTMLInputElement>(null);
-    const inputRefConfirmPassword = useRef<HTMLInputElement>(null);
 
-    // const [ newPassword, setNewPassword] = useState<string | null>(null);
-    
-    function handleSubmit(event: any) {
+async function handleUpdateForTable(userId: string, newEmail: string) {
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('user_names')
+            .update({ email_val: newEmail })
+            .eq('id', userId)
+            .select();
+        if (error) return false;
+        return (data && data.length > 0) ? true : false;
+    } catch (error) {
+        return false;
+    }
+}
+
+export function EmailComponent({ setUserAction }: EmailProps) {
+    const { userId, setReadyToClose, } = useAdminContext();
+    const inputRefNewEmail = useRef<HTMLInputElement>(null);
+    async function handleSubmit(event: any) {
         event.preventDefault();
-        // const _newPassword = inputRefPassword.current?.value;
-        // const confirmNewPassword = inputRefConfirmPassword.current?.value;
-        // if (_newPassword !== confirmNewPassword) return alert("Passwords do not match. Please try again.");
-        // try {
-        //     (setNewPassword && _newPassword) && setNewPassword(_newPassword);
-        // } catch (error) {
-        //     alert("There was an error updating your password. Try again later.");
-        // }
-        // return setCloseIt && setCloseIt(true); // get to hree if no error
+        const _newEmail = inputRefNewEmail.current?.value;
+        if (!_newEmail) return alert("Please enter a new email.");
+        if (_newEmail && !_newEmail.includes('@')) return alert("Please enter a valid email.");
+        if (_newEmail && _newEmail.length < 6) return alert("Email value must be at least 6 characters long.");
+        if (userId) {
+            const resVal = await handleUpdateForTable(userId, _newEmail);
+            if (!resVal) return alert("There was an error updating your email. Please try again later.")
+            const { data: user, error } = await supabaseAdmin.auth.admin.updateUserById(
+                userId, { email: _newEmail }
+            );
+            if (error) return alert(`There was an error updating your email, ${error.message}`);
+            if (user) return setReadyToClose && setReadyToClose(true);
+        } else {
+            return setUserAction('error');
+        }
     }
 
     return (
         <div>
             <h3><i>Lets reset your email</i></h3>
-            <div style={{
-                marginTop: '2rem',
-                border: '2px solid #4E1E66',
-                padding: '1rem',
-                marginBottom: '1rem'
-            }}>
-                <label>New Password:</label>{' '}
-                <input ref={inputRefPassword} type="password" id="newPassword" minLength={6} required />
-                <br />
-                <br />
-                <label>Confirm New Password:</label>{' '}
-                <input ref={inputRefConfirmPassword} type="password" id="confirmNewPassword" required />
-                <br />
-                <br />
+            <div style={{ marginTop: '2rem', border: '2px solid #4E1E66', padding: '1rem', marginBottom: '1rem' }}>
+                <form>
+                    <label>New Email:</label>{' '}
+                    <input ref={inputRefNewEmail} type="email" id="newPassword" minLength={6} required /><br />
+                    <small>this is what you use to login</small>
+                    <br />
+                </form>
             </div>
             <button type="button" onClick={handleSubmit}>submit</button>
             <br />
             <br />
-    </div>
+        </div>
     )
 }
