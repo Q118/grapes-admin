@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useAdminContext } from '../contexts/AdminContext';
 import { PasswordComponent } from './Password';
 import { PrivacyComp } from './Privacy';
@@ -32,18 +31,18 @@ export function Home() {
     const { loading, displayName, setLoading, setUserId, setDisplayName, readyToClose } = useAdminContext();
     const [ error, setError ] = useState<string | null>(null);
     const [ userAction, setUserAction ] = useState<string | null>(null);
-    let location = useLocation();
 
-    useEffect(() => { setUpHome(); }, [ location ])
+    useEffect(() => { setUpHome(); }, [ window.location.href ])
 
     function setUpHome() {
         if (window.location.href.includes('error')) {
             setUserAction('error');
             setError(window.location.href.split('error=')[ 1 ]);
         }
-        let paramArray = location.search.split('?').filter((param) => param !== '');
-        const urlVal = USER_ACTIONS[ paramArray[ 0 ] ] || null;
-        const user_id = paramArray[ 1 ]?.split('=')[ 1 ] || null;
+        let paramArray = window.location.href.split('?').filter((param) => param !== '');
+        console.log(paramArray)
+        const urlVal = USER_ACTIONS[ paramArray[ 1 ] ] || null;
+        const user_id = paramArray[ 2 ]?.split('=')[ 1 ] || null;
         if (user_id && user_id.length > 0) {
             setUserAction(urlVal);
             setUserId && setUserId(user_id);
