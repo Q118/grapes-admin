@@ -9,6 +9,9 @@ type ContextProps = {
     setLoading: (loading: boolean) => void;
     readyToClose: boolean;
     setReadyToClose: (closeIt: boolean) => void;
+    /** the email of the user before changing */
+    ogEmail: string | null;
+    setOgEmail: (email: string | null) => void;
 };
 
 const AdminContext = createContext<Partial<ContextProps>>({});
@@ -23,23 +26,10 @@ const AdminProvider = (props: Props) => {
     const [ userId, setUserId ] = useState<string | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
     const [ readyToClose, setReadyToClose ] = useState<boolean>(false);
-
-
-
+    const [ogEmail, setOgEmail] = useState<string | null>(null);
 
     return (
-        <AdminContext.Provider value={{
-            // userState,
-            // session,
-            displayName,
-            setDisplayName,
-            userId,
-            setUserId,
-            loading,
-            setLoading,
-            readyToClose,
-            setReadyToClose
-        }}>
+        <AdminContext.Provider value={{ displayName, setDisplayName, userId, setUserId, loading, setLoading, readyToClose, setReadyToClose, ogEmail, setOgEmail }}>
             {props.children}
         </AdminContext.Provider>
     );

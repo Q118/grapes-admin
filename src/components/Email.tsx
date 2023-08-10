@@ -8,11 +8,15 @@ type EmailProps = {
 };
 
 
-async function handleUpdateForTable(userId: string, newEmail: string) {
+async function handleUpdateForTable(userId: string, newEmail: string, oldEmail: string, displayName: string) {
     try {
+        const updateObject = {
+            email_val: newEmail,
+            ...(oldEmail === displayName) && { user_name: newEmail },
+        };
         const { data, error } = await supabaseAdmin
             .from('user_names')
-            .update({ email_val: newEmail })
+            .update(updateObject)
             .eq('id', userId)
             .select();
         if (error) return false;
@@ -23,7 +27,7 @@ async function handleUpdateForTable(userId: string, newEmail: string) {
 }
 
 export function EmailComponent({ setUserAction }: EmailProps) {
-    const { userId, setReadyToClose, } = useAdminContext();
+    const { userId, setReadyToClose, ogEmail, displayName } = useAdminContext();
     const inputRefNewEmail = useRef<HTMLInputElement>(null);
     async function handleSubmit(event: any) {
         event.preventDefault();
@@ -32,7 +36,7 @@ export function EmailComponent({ setUserAction }: EmailProps) {
         if (_newEmail && !_newEmail.includes('@')) return alert("Please enter a valid email.");
         if (_newEmail && _newEmail.length < 6) return alert("Email value must be at least 6 characters long.");
         if (userId) {
-            const resVal = await handleUpdateForTable(userId, _newEmail);
+            const resVal = await handleUpdateForTable(userId, _newEmail, ogEmail!, displayName!);
             if (!resVal) return alert("There was an error updating your email. Please try again later.")
             const { data: user, error } = await supabaseAdmin.auth.admin.updateUserById(
                 userId, { email: _newEmail }
@@ -46,7 +50,7 @@ export function EmailComponent({ setUserAction }: EmailProps) {
 
     return (
         <div>
-            <h3><i>Lets reset your email</i></h3>
+            <h3><i>Lets change your email</i></h3>
             <div style={{ marginTop: '2rem', border: '2px solid #4E1E66', padding: '1rem', marginBottom: '1rem' }}>
                 <form>
                     <label>New Email:</label>{' '}

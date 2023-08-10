@@ -20,6 +20,7 @@ const USER_ACTIONS: MyMap = {
     'error': 'error'
 }
 
+
 /**
  * @component Home
  * @description Home page - renders either the password-reset form, 
@@ -28,7 +29,7 @@ const USER_ACTIONS: MyMap = {
  * (just simply changing their password can be done inside the app)
  */
 export function Home() {
-    const { loading, displayName, setLoading, setUserId, setDisplayName, readyToClose } = useAdminContext();
+    const { loading, displayName, setLoading, setUserId, setDisplayName, readyToClose, setOgEmail } = useAdminContext();
     const [ error, setError ] = useState<string | null>(null);
     const [ userAction, setUserAction ] = useState<string | null>(null);
 
@@ -54,7 +55,7 @@ export function Home() {
     async function handleDisplayName(user_id: string) {
         const { data, error } = await supabase
             .from('user_names')
-            .select('user_name')
+            .select('user_name, email_val')
             .eq('id', user_id)
         if (error) {
             setUserAction('error');
@@ -62,6 +63,7 @@ export function Home() {
         }
         if (data && data[ 0 ]) {
             setDisplayName && setDisplayName(data[ 0 ].user_name);
+            setOgEmail && setOgEmail(data[ 0 ].email_val);
             return;
         }
         return setUserAction('error');
