@@ -42,7 +42,11 @@ export function Home() {
         console.log(paramArray)
         const urlVal = USER_ACTIONS[ paramArray[ 1 ] ] || null;
         const user_id = paramArray[ 2 ]?.split('=')[ 1 ] || null;
-        if (user_id && user_id.length > 0) {
+        if (urlVal === 'privacy') {
+            setUserAction(urlVal);
+            return setLoading && setLoading(false);
+        }
+        if ((user_id && user_id.length > 0)) {
             setUserAction(urlVal);
             setUserId && setUserId(user_id);
             handleDisplayName(user_id).then(() => setLoading && setLoading(false));
