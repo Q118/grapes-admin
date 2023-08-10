@@ -9,9 +9,7 @@ import { supabase } from '../initSupabase';
 import { CloseComponent } from './CloseComponent';
 import { request_error } from '../constants';
 
-interface MyMap {
-    [ key: string ]: string | undefined
-}
+interface MyMap { [ key: string ]: string | undefined }
 /** corresponding map urlval:componentToRender */
 const USER_ACTIONS: MyMap = {
     'resetpassword': 'password',
